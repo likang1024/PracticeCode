@@ -1,0 +1,16 @@
+$cberesultmap='D:\Svndir\COMMON\OCG局点par包\V500R006C30\OOTB\NGOCG\ResMapping\OCG_CBERESULTMAP.ci' 
+$xmldata = [xml](Get-Content $cberesultmap)
+$operation =  $xmlData.PrjAction.Table.operations.operation | Where-Object  {$_.type -match "Insert"}  
+
+$operation.records.record | ForEach-Object{ 
+
+$transsituation=$_.field | Where-Object {$_.name -match "transsituation"}; 
+$cbersultcode=$_.field | Where-Object {$_.name -match "cbersultcode"};
+$cberesultend= $_.field | Where-Object {$_.name.Equals("cberesultend") }; 
+$uvsresultcode=$_.field | Where-Object {$_.name -match "uvsresultcode"};
+$messageid=$_.field | Where-Object {$_.name -match "messageid"};
+
+if ($transsituation.InnerText.Equals("2")) {
+"result:{0}-{1} messageid:{2} uvsresultcode:{3}" -F $cbersultcode.InnerText, $cberesultend.InnerText,$messageid.InnerText,$uvsresultcode.InnerText
+}
+}
